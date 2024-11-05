@@ -2827,7 +2827,7 @@ if not st.query_params or not st.query_params["userId"]:
 
 if not 'df_user' in st.session_state:
     
-    st.session_state.df_user = getUser(st.query_params["userId"], 'test_phoenix_joao_pessoa')
+    st.session_state.df_user = getUser(st.query_params["userId"], 'test_phoenix_aracaju')
 
 
 # Puxando dados do phoenix
