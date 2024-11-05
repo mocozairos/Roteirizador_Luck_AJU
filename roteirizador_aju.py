@@ -2815,11 +2815,28 @@ st.header('Parâmetros')
 
 row1 = st.columns(3)
 
+# Verificando se o link está com ID do usuário
+
+if not st.query_params or not st.query_params["userId"]:
+
+    st.error("Usuário não autenticado")
+
+    st.stop()
+
+# Carrega os dados da tabela 'user`
+
+if not 'df_user' in st.session_state:
+    
+    st.session_state.df_user = getUser(st.query_params["userId"], 'test_phoenix_joao_pessoa')
+
+
 # Puxando dados do phoenix
 
 if not 'df_router' in st.session_state:
 
     st.session_state.df_router = gerar_df_phoenix('vw_router', 'test_phoenix_aracaju')
+
+    st.session_state.df_router['Data Horario Apresentacao Original'] = st.session_state.df_router['Data Horario Apresentacao']
     
 with row1[0]:
 
@@ -2868,6 +2885,8 @@ with row2[0]:
     if atualizar_phoenix:
 
         st.session_state.df_router = gerar_df_phoenix('vw_router', 'test_phoenix_aracaju')
+
+        st.session_state.df_router['Data Horario Apresentacao Original'] = st.session_state.df_router['Data Horario Apresentacao']
 
         if 'df_servico_voos_horarios' in st.session_state:
             
