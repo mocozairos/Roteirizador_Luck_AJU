@@ -3451,12 +3451,13 @@ if servico_roteiro and 'df_horario_esp_ultimo_hotel' in st.session_state:
 
 if roteirizar:
 
-    puxar_sequencias_hoteis('1R7naaM1msQJEBceRbfxDjb_jVCJdDqBlT8gC8_U844w', ['Hoteis Sul', 'Hoteis Makai', 'Hoteis Orla'], ['df_sul', 'df_makai', 'df_orla'])
+    puxar_sequencias_hoteis('1R7naaM1msQJEBceRbfxDjb_jVCJdDqBlT8gC8_U844w', ['Hoteis Sul', 'Hoteis Makai', 'Hoteis Orla', 'Hoteis Ribeiropolis'], ['df_sul', 'df_makai', 'df_orla', 'df_ribeiropolis'])
 
     st.session_state.dict_regioes_hoteis = \
         {'Transfer OUT Aeroporto - Makai Resort (Barra dos Coqueiros)': ['df_makai', 'Makai', 'Hoteis Makai', 'Makai'], 
          'Transfer OUT Aeroporto - Região Sul': ['df_sul', 'Sul', 'Hoteis Sul', 'Sul'], 
-         'Transfer OUT Aeroporto - Região Orla': ['df_orla', 'Orla', 'Hoteis Orla', 'Orla']}
+         'Transfer OUT Aeroporto - Região Orla': ['df_orla', 'Orla', 'Hoteis Orla', 'Orla'], 
+         'TRANSFER OUT  RIBEIRÓPOLIS / AEROPORTO AJU': ['df_ribeiropolis', 'Ribeiropolis', 'Hoteis Ribeiropolis', 'Ribeiropolis']}
 
     nome_df_hotel = st.session_state.dict_regioes_hoteis[servico_roteiro][0]
 
