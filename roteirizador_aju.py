@@ -3505,8 +3505,6 @@ if roteirizar:
 
         st.success('Todos os hoteis estão cadastrados na lista de sequência de hoteis')
 
-        df_router_filtrado
-
         df_router_filtrado_2 = criar_df_servicos_2(df_router_filtrado, st.session_state.df_juncao_voos, df_hoteis_ref)
 
         # Inserir coluna com horários específicos de junções/voos
