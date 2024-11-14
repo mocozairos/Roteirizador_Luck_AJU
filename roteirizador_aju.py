@@ -3716,22 +3716,12 @@ if 'nome_html' in st.session_state and len(st.session_state.df_roteiros_alternat
 
                 df_router_filtrado_2 = st.session_state.df_router_filtrado_2
 
-                df_roteiros_apoios = st.session_state.df_roteiros_apoios
-
-                df_roteiros_apoios_alternativos = pd.DataFrame(columns=st.session_state.df_roteiros_apoios_alternativos.columns.tolist())
-
                 if len(rotas_alternativas)>0:
 
                     df_roteiros_alternativos = st.session_state.df_roteiros_alternativos\
                         [st.session_state.df_roteiros_alternativos['Roteiro'].isin(rotas_alternativas)].reset_index(drop=True)
                     
-                    df_roteiros_apoios_alternativos = st.session_state.df_roteiros_apoios_alternativos\
-                        [st.session_state.df_roteiros_apoios_alternativos['Roteiro'].isin(rotas_alternativas)].reset_index(drop=True)
-                    
                     df_router_filtrado_2 = df_router_filtrado_2[~df_router_filtrado_2['Roteiro'].isin(rotas_alternativas)]\
-                        .reset_index(drop=True)
-                    
-                    df_roteiros_apoios = df_roteiros_apoios[~df_roteiros_apoios['Roteiro'].isin(rotas_alternativas)]\
                         .reset_index(drop=True)
                     
                 else:
@@ -3743,19 +3733,10 @@ if 'nome_html' in st.session_state and len(st.session_state.df_roteiros_alternat
                     df_roteiros_alternativos_2 = st.session_state.df_roteiros_alternativos_2\
                         [st.session_state.df_roteiros_alternativos_2['Roteiro'].isin(rotas_alternativas_2)].reset_index(drop=True)
                     
-                    df_roteiros_apoios_alternativos_2 = st.session_state.df_roteiros_apoios_alternativos_2\
-                        [st.session_state.df_roteiros_apoios_alternativos_2['Roteiro'].isin(rotas_alternativas_2)].reset_index(drop=True)
-                    
                     df_router_filtrado_2 = df_router_filtrado_2[~df_router_filtrado_2['Roteiro'].isin(rotas_alternativas_2)]\
                         .reset_index(drop=True)
                     
-                    df_roteiros_apoios = df_roteiros_apoios[~df_roteiros_apoios['Roteiro'].isin(rotas_alternativas_2)]\
-                        .reset_index(drop=True)
-                    
                     df_roteiros_alternativos = pd.concat([df_roteiros_alternativos, df_roteiros_alternativos_2], ignore_index=True)
-
-                    df_roteiros_apoios_alternativos = pd.concat([df_roteiros_apoios_alternativos, df_roteiros_apoios_alternativos_2], 
-                                                                ignore_index=True)
                     
                 else:
 
@@ -3766,19 +3747,10 @@ if 'nome_html' in st.session_state and len(st.session_state.df_roteiros_alternat
                     df_roteiros_alternativos_3 = st.session_state.df_roteiros_alternativos_3\
                         [st.session_state.df_roteiros_alternativos_3['Roteiro'].isin(rotas_alternativas_3)].reset_index(drop=True)
                     
-                    df_roteiros_apoios_alternativos_3 = st.session_state.df_roteiros_apoios_alternativos_3\
-                        [st.session_state.df_roteiros_apoios_alternativos_3['Roteiro'].isin(rotas_alternativas_3)].reset_index(drop=True)
-                    
                     df_router_filtrado_2 = df_router_filtrado_2[~df_router_filtrado_2['Roteiro'].isin(rotas_alternativas_3)]\
                         .reset_index(drop=True)
                     
-                    df_roteiros_apoios = df_roteiros_apoios[~df_roteiros_apoios['Roteiro'].isin(rotas_alternativas_3)]\
-                        .reset_index(drop=True)
-                    
                     df_roteiros_alternativos = pd.concat([df_roteiros_alternativos, df_roteiros_alternativos_3], ignore_index=True)
-
-                    df_roteiros_apoios_alternativos = pd.concat([df_roteiros_apoios_alternativos, df_roteiros_apoios_alternativos_3], 
-                                                                ignore_index=True)
                     
                 else:
 
@@ -3789,19 +3761,10 @@ if 'nome_html' in st.session_state and len(st.session_state.df_roteiros_alternat
                     df_roteiros_alternativos_4 = st.session_state.df_roteiros_alternativos_4\
                         [st.session_state.df_roteiros_alternativos_4['Roteiro'].isin(rotas_alternativas_4)].reset_index(drop=True)
                     
-                    df_roteiros_apoios_alternativos_4 = st.session_state.df_roteiros_apoios_alternativos_4\
-                        [st.session_state.df_roteiros_apoios_alternativos_4['Roteiro'].isin(rotas_alternativas_4)].reset_index(drop=True)
-                    
                     df_router_filtrado_2 = df_router_filtrado_2[~df_router_filtrado_2['Roteiro'].isin(rotas_alternativas_4)]\
                         .reset_index(drop=True)
                     
-                    df_roteiros_apoios = df_roteiros_apoios[~df_roteiros_apoios['Roteiro'].isin(rotas_alternativas_4)]\
-                        .reset_index(drop=True)
-                    
                     df_roteiros_alternativos = pd.concat([df_roteiros_alternativos, df_roteiros_alternativos_4], ignore_index=True)
-
-                    df_roteiros_apoios_alternativos = pd.concat([df_roteiros_apoios_alternativos, df_roteiros_apoios_alternativos_4], 
-                                                                ignore_index=True)
                     
                 else:
 
