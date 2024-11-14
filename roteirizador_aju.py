@@ -380,22 +380,50 @@ def definir_horario_primeiro_hotel(df, index):
     
 def roteirizar_hoteis_mais_pax_max(df_servicos, roteiro, df_hoteis_pax_max):
 
-    # Criando dataframes com os hoteis que estouram a capacidade máxima da frota em um mesmo voo
+    # Roteirizando reservas com mais paxs que a capacidade máxima da frota
 
-    df_ref_sem_juncao = df_servicos[(df_servicos['Bus']=='X') & (pd.isna(df_servicos['Junção']))]\
-        .groupby(['Modo do Servico', 'Servico', 'Voo', 'Est Origem']).agg({'Total ADT | CHD': 'sum'}).reset_index()
+    df_ref_reservas_pax_max = df_servicos.groupby(['Modo do Servico', 'Reserva', 'Servico', 'Est Origem']).agg({'Total ADT | CHD': 'sum'}).reset_index()
 
-    df_ref_sem_juncao = df_ref_sem_juncao[df_ref_sem_juncao['Total ADT | CHD']>=st.session_state.pax_max].reset_index()
+    df_ref_reservas_pax_max = df_ref_reservas_pax_max[df_ref_reservas_pax_max['Total ADT | CHD']>=st.session_state.pax_max].reset_index()
 
-    # Criando dataframes com os hoteis que estouram a capacidade máxima da frota em uma mesma junção
+    if len(df_ref_reservas_pax_max)>0:
+
+        carro=0
+
+        for index in range(len(df_ref_reservas_pax_max)):
+
+            roteiro+=1
+
+            pax_ref = df_ref_reservas_pax_max.at[index, 'Total ADT | CHD']
+
+            modo = df_ref_reservas_pax_max.at[index, 'Modo do Servico']
+
+            servico = df_ref_reservas_pax_max.at[index, 'Servico']
+
+            reserva_ref = df_ref_reservas_pax_max.at[index, 'Reserva']
+
+            hotel = df_ref_reservas_pax_max.at[index, 'Est Origem']
+
+            st.warning(f'O hotel {hotel} da reserva {reserva_ref} tem {pax_ref} paxs e, portanto vai ser roteirizado em um ônibus')
+
+            carro+=1
+
+            df_hotel_pax_max = df_servicos[(df_servicos['Reserva']==reserva_ref)].reset_index()
+
+            df_servicos = df_servicos.drop(index=df_hotel_pax_max.at[index, 'index'])
+
+            df_hoteis_pax_max = pd.concat([df_hoteis_pax_max, df_hotel_pax_max.loc[[index]]], ignore_index=True)
+
+            df_hoteis_pax_max.at[len(df_hoteis_pax_max)-1, 'Roteiro']=roteiro
+
+            df_hoteis_pax_max.at[len(df_hoteis_pax_max)-1, 'Carros']=carro
+
+    # Roteirizando junções com mais paxs que a capacidade máxima da frota
 
     df_ref_com_juncao = df_servicos[(df_servicos['Bus']=='X') & ~(pd.isna(df_servicos['Junção']))]\
         .groupby(['Modo do Servico', 'Servico', 'Junção', 'Est Origem']).agg({'Total ADT | CHD': 'sum'}).reset_index()
 
     df_ref_com_juncao = df_ref_com_juncao[df_ref_com_juncao['Total ADT | CHD']>=st.session_state.pax_max].reset_index()
-
-    # Se houver hotel em uma mesma junção com mais paxs que a capacidade máxima da frota, vai inserindo o horário de apresentação de cada hotel 
-    # e tira de df_router_filtrado_2
 
     if len(df_ref_com_juncao)>0:
 
@@ -446,8 +474,12 @@ def roteirizar_hoteis_mais_pax_max(df_servicos, roteiro, df_hoteis_pax_max):
 
                         df_hoteis_pax_max.at[len(df_hoteis_pax_max)-1, 'Carros']=carro
 
-    # Se houver hotel em um mesmo voo com mais paxs que a capacidade máxima da frota, vai inserindo o horário de apresentação de cada hotel 
-    # e tira de df_router_filtrado_2
+    # Roteirizando voos com mais paxs que a capacidade máxima da frota
+
+    df_ref_sem_juncao = df_servicos[(df_servicos['Bus']=='X') & (pd.isna(df_servicos['Junção']))]\
+        .groupby(['Modo do Servico', 'Servico', 'Voo', 'Est Origem']).agg({'Total ADT | CHD': 'sum'}).reset_index()
+
+    df_ref_sem_juncao = df_ref_sem_juncao[df_ref_sem_juncao['Total ADT | CHD']>=st.session_state.pax_max].reset_index()
 
     if len(df_ref_sem_juncao)>0:
 
@@ -498,18 +530,25 @@ def roteirizar_hoteis_mais_pax_max(df_servicos, roteiro, df_hoteis_pax_max):
 
                         df_hoteis_pax_max.at[len(df_hoteis_pax_max)-1, 'Carros']=carro
 
+    # Transformando colunas 'Horario Voo' e 'Menor Horário' em datetime
+
     if len(df_hoteis_pax_max)>0:
 
         df_hoteis_pax_max['Horario Voo'] = pd.to_datetime(df_hoteis_pax_max['Horario Voo'], format='%H:%M:%S').dt.time
     
         df_hoteis_pax_max['Menor Horário'] = pd.to_datetime(df_hoteis_pax_max['Menor Horário'], format='%H:%M:%S').dt.time
 
+    # Definindo horários de cada linha de df_hoteis_pax_max com a função definir_horario_primeiro_hotel
+
     for index in range(len(df_hoteis_pax_max)):
 
-        df_hoteis_pax_max.at[index, 'Data Horario Apresentacao'] = \
-            definir_horario_primeiro_hotel(df_hoteis_pax_max, index)
+        df_hoteis_pax_max.at[index, 'Data Horario Apresentacao'] = definir_horario_primeiro_hotel(df_hoteis_pax_max, index)
+
+    # Resetando os índices de df_servicos porque houve exclusão de linhas
 
     df_servicos = df_servicos.reset_index(drop=True)
+
+    # Excluindo coluna 'index' do dataframe df_hoteis_pax_max
 
     if 'index' in df_hoteis_pax_max.columns.tolist():
 
