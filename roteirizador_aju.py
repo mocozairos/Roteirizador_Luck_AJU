@@ -1296,7 +1296,7 @@ def gerar_roteiros_alternativos(df_servicos):
 
                         data_horario_hotel = df_ref.at[index-1, 'Data Horario Apresentacao']-intervalo_ref
 
-                        if data_horario_primeiro_hotel - data_horario_hotel>intervalo_pu_hotel:
+                        if data_horario_primeiro_hotel - data_horario_hotel>transformar_timedelta(st.session_state.intervalo_pu_hotel):
 
                             carros+=1
 
@@ -1638,7 +1638,7 @@ def gerar_roteiros_alternativos_3(df_servicos):
             
                                     data_horario_hotel = df_ref.at[index-1, 'Data Horario Apresentacao']-intervalo_ref
             
-                                    if data_horario_primeiro_hotel - data_horario_hotel>intervalo_pu_hotel:
+                                    if data_horario_primeiro_hotel - data_horario_hotel>transformar_timedelta(st.session_state.intervalo_pu_hotel):
             
                                         carros+=1
             
