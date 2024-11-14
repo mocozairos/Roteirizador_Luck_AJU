@@ -227,7 +227,7 @@ def criar_df_servicos_2(df_servicos, df_juncao_voos, df_hoteis):
 
     # Preenchendo coluna 'Data Horario Apresentacao'
 
-    df_servicos['Data Horario Apresentacao'] = pd.to_datetime(df_servicos['Data Voo'] + ' ' + df_servicos['Horario Voo'])
+    df_servicos['Data Horario Apresentacao'] = pd.to_datetime(df_servicos['Data Voo'].astype(str) + ' ' + df_servicos['Horario Voo'].astype(str))
     
     # Criando coluna de Junção através de pd.merge
 
@@ -3504,6 +3504,8 @@ if roteirizar:
         # Mensagens de andamento do script informando como foi a verificação dos hoteis cadastrados
 
         st.success('Todos os hoteis estão cadastrados na lista de sequência de hoteis')
+
+        df_router_filtrado
 
         df_router_filtrado_2 = criar_df_servicos_2(df_router_filtrado, st.session_state.df_juncao_voos, df_hoteis_ref)
 
